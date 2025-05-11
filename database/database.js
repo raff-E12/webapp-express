@@ -16,7 +16,7 @@ const connection_database = database.createConnection({
 
 connection_database.connect((error) =>{
     if (error) throw error;
-    return console.log(">>Database Collegato con successo...")
+    return console.log(">> Database Collegato con successo...")
 });
 
 module.exports = connection_database;
