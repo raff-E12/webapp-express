@@ -6,7 +6,7 @@
 
 const data = require("../database/database.js");
 const database_use = data;
-const fs = require("fs").promises;
+const fs = require("fs").promises; //restituzione di una promise. (in callback)
 
 function Movies_Lists(req, res) {
     const query = "SELECT id, title, director, genre, release_year, abstract, created_at, updated_at FROM movies";
