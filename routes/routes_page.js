@@ -14,7 +14,7 @@ routes.get("/movies/all", Movies_Lists);
 routes.get("/movies/:id", Movies_Search);
 
 //Chiamata POST
-routes.post("/movies8789ikii/img", images_Add);
+routes.post("/movies/img", images_Add);
 
 
 module.exports = routes;
