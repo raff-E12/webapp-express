@@ -13,7 +13,8 @@ const routes = express.Router();
 routes.get("/movies/all", Movies_Lists);
 routes.get("/movies/:id", Movies_Search);
 
-routes.post("/movies/img", images_Add);
+//Chiamata POST
+routes.post("/movies8789ikii/img", images_Add);
 
 
 module.exports = routes;

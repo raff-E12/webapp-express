@@ -4,8 +4,6 @@
  * @description - Creazione dei seguenti Middleware.
  */
 
-const multer = require("multer");
-
 function Pages_alternatives(req, res, next) {
     res.status(404).json({msg: "Rotta Assente, Riprova!!", code: 404});
     next()
