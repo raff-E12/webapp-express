@@ -5,13 +5,14 @@
  */
 
 const mysql2 = require("mysql2");
+require("dotenv").config(); //Importazione di ".env"
 
 const database = mysql2;
 const connection_database = database.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root_12*",
-    database: "db_movies"
+    host: `${process.env.MYSQL_HOST}`,
+    user: `${process.env.MYSQL_USER}`,
+    password: `${process.env.MYSQL_PASSWORD}`,
+    database: `${process.env.MYSQL_DATABASE_ACCESS}`
 });
 
 connection_database.connect((error) =>{
