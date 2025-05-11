@@ -5,7 +5,7 @@
  */
 
 const mysql2 = require("mysql2");
-require("dotenv").config(); //Importazione di ".env"
+require("dotenv").config(); //Importazione di ".env" in configurazione.
 
 const database = mysql2;
 const connection_database = database.createConnection({
