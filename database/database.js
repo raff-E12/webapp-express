@@ -10,7 +10,7 @@ const database = mysql2;
 const connection_database = database.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "root_12*",
     database: "db_movies"
 });
 
