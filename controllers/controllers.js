@@ -82,10 +82,25 @@ function Reviews_id(req, res) {
     })
 }
 
+function Add_Reviews(req, res) {
+    const { movie_id, name, vote, text } = req.body;
+    const id_movie = Number(movie_id);
+    const name_user = String(name);
+    const rate_vote = Number(vote);
+    const description_rate = String(text);
+    
+    const query = `INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)`;
+    database_use.query(query, [id_movie, name_user, rate_vote, description_rate], (error, result) =>{
+        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+        return res.status(200).json({msg: "Aggiunto Con Successo!!", code: 200});
+    })
+}
+
 module.exports = {
     Movies_Search,
     Movies_Lists,
     Images_Add,
     Reviews_Lists,
-    Reviews_id
+    Reviews_id,
+    Add_Reviews
 };
