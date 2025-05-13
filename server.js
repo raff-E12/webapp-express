@@ -7,12 +7,16 @@
 const express = require("express");
 const routes = require("./routes/routes_page.js");
 const { Pages_alternatives } = require("./middlewares/middlewares.js");
+const cors = require("cors");
 
 const app = express();
 const port = 4000;
 
 app.use(express.json());
 app.use(express.static("public"));
+app.use(cors({
+  origin: " http://localhost:5173"
+}))
 
 app.use("/api", routes);
 app.get("/", (req, res) =>{

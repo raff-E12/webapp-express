@@ -5,16 +5,18 @@
  */
 
 const express = require("express");
-const { Movies_Lists, Movies_Search, images_Add } = require("../controllers/controllers");
+const { Movies_Lists, Movies_Search, Images_Add, Reviews_Lists } = require("../controllers/controllers");
 
 const routes = express.Router();
 
-//Chiamate GET
+//Chimate di Liste
 routes.get("/movies/all", Movies_Lists);
-routes.get("/movies/:id", Movies_Search);
+routes.get("/reviews/all", Reviews_Lists);
 
-//Chiamata POST
-routes.post("/movies/img", images_Add);
+//Chiamate Generali
+routes.get("/movies/:id", Movies_Search);
+routes.post("/movies/img", Images_Add);
+
 
 
 module.exports = routes;

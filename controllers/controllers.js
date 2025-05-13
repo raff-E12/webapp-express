@@ -9,7 +9,7 @@ const database_use = data;
 const fs = require("fs").promises; //restituzione di una promise. (in callback)
 
 function Movies_Lists(req, res) {
-    const query = "SELECT id, title, director, genre, release_year, abstract, created_at, updated_at FROM movies";
+    const query = "SELECT * FROM movies";
     database_use.query(query, (error, result) =>{
         if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
         return res.status(200).json({result, code: 200});
@@ -19,8 +19,8 @@ function Movies_Lists(req, res) {
 function Movies_Search(req, res) {
     const id_movies = String(req.params.id);
     console.log(id_movies);
-    const query = "SELECT id, title, director, genre, release_year, abstract, created_at, updated_at FROM movies WHERE id = ?";
-    const query_rec = "SELECT * FROM reviews WHERE movie_id = 2";
+    const query = "SELECT * FROM movies WHERE id = ?";
+    const query_rec = "SELECT * FROM reviews WHERE movie_id = ?";
 
     database_use.query(query, [id_movies], (error, result) =>{
       if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
@@ -34,7 +34,7 @@ function Movies_Search(req, res) {
     })
 }
 
-async function images_Add(req, res) {
+async function Images_Add(req, res) {
    try {
      const body_req_img = String(req.body.image);
     const id = String(req.body.id);
@@ -65,8 +65,17 @@ async function images_Add(req, res) {
    }
 }
 
+function Reviews_Lists(req, res) {
+    const query = "SELECT * FROM reviews";
+    database_use.query(query, (error, result) =>{
+        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+        return res.status(200).json({result, code: 200});
+    })
+}
+
 module.exports = {
     Movies_Search,
     Movies_Lists,
-    images_Add
+    Images_Add,
+    Reviews_Lists
 };
