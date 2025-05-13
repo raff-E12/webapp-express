@@ -73,9 +73,19 @@ function Reviews_Lists(req, res) {
     })
 }
 
+function Reviews_id(req, res) {
+    const id = String(req.params.id);
+    const query = "SELECT * FROM reviews WHERE movie_id = ?";
+    database_use.query(query, [id], (error, result) =>{
+        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+        return res.status(200).json({result, code: 200});
+    })
+}
+
 module.exports = {
     Movies_Search,
     Movies_Lists,
     Images_Add,
-    Reviews_Lists
+    Reviews_Lists,
+    Reviews_id
 };

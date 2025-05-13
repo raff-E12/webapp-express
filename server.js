@@ -10,8 +10,9 @@ const { Pages_alternatives } = require("./middlewares/middlewares.js");
 const cors = require("cors");
 
 const app = express();
-const port = 4000;
+const port = Number(process.env.PORT) || 4000;
 
+// Middlewares
 app.use(express.json());
 app.use(express.static("public"));
 app.use(cors({
