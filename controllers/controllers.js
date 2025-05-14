@@ -66,7 +66,7 @@ async function Images_Add(req, res) {
 }
 
 function Reviews_Lists(req, res) {
-    const query = `SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1;`;
+    const query = `SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1`;
     database_use.query(query, (error, result) =>{
         if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
         return res.status(200).json({result, code: 200});
@@ -77,7 +77,10 @@ function Reviews_id(req, res) {
     const id = String(req.params.id);
     const query = "SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1 WHERE tb1.movie_id = ?";
     database_use.query(query, [id], (error, result) =>{
-        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500}); 
+        if (result.length === 0) {
+           return res.status(404).json({result, code: 404});
+        }
         return res.status(200).json({result, code: 200});
     })
 }
@@ -96,11 +99,31 @@ function Add_Reviews(req, res) {
     })
 }
 
+
+function Add_Movies(req, res) {
+    const { title, director, genre, release_year, abstract, image } = req.body;
+    const search_query =  `SELECT * FROM movies WHERE image = ?`;
+    database_use.query(search_query, [image], (error, result) =>{
+      if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+
+      if (result.length > 0) {
+         return res.status(302).json({msg: "L'immagine è già dentro", code: 302});
+      }
+
+      const insert_query = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)";
+      database_use.query(insert_query, [title, director, genre, release_year, abstract, image], (error, result) =>{
+      if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+      return res.status(200).json({msg: "Record Aggiunto con sucesso!!", code: 200});
+    })
+    })
+}
+
 module.exports = {
     Movies_Search,
     Movies_Lists,
     Images_Add,
     Reviews_Lists,
     Reviews_id,
-    Add_Reviews
+    Add_Reviews,
+    Add_Movies
 };
