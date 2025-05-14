@@ -49,7 +49,7 @@ async function Images_Add(req, res) {
             });
       }
 
-    const path =  `./public/${body_req_img}`;
+    const path =  `../../../public/${body_req_img}`;
     // console.log(path);
     const query = "UPDATE movies SET image = ? WHERE id = ?";
     database_use.query(query, [path, id], (error, result) =>{
@@ -66,7 +66,7 @@ async function Images_Add(req, res) {
 }
 
 function Reviews_Lists(req, res) {
-    const query = "SELECT * FROM reviews";
+    const query = `SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1;`;
     database_use.query(query, (error, result) =>{
         if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
         return res.status(200).json({result, code: 200});
@@ -75,7 +75,7 @@ function Reviews_Lists(req, res) {
 
 function Reviews_id(req, res) {
     const id = String(req.params.id);
-    const query = "SELECT * FROM reviews WHERE movie_id = ?";
+    const query = "SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1 WHERE tb1.movie_id = ?";
     database_use.query(query, [id], (error, result) =>{
         if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
         return res.status(200).json({result, code: 200});
