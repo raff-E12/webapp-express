@@ -95,7 +95,7 @@ function Add_Reviews(req, res) {
     
     const query = `INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)`;
     database_use.query(query, [id_movie, name_user, rate_vote, description_rate], (error, result) =>{
-        console.log(error);
+        // console.log(error);
         if(error) return res.status(400).json({msg:"Dati Errati, Riprova a ricaricare la sessione", code: 400});
         return res.status(200).json({msg: "Aggiunto Con Successo!!", code: 200});
     })
