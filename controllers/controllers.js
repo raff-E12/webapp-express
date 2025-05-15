@@ -96,7 +96,7 @@ function Add_Reviews(req, res) {
     const query = `INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)`;
     database_use.query(query, [id_movie, name_user, rate_vote, description_rate], (error, result) =>{
         console.log(error);
-        if(error.errno !== 1054) return res.status(400).json({msg:"Dati Errati, Riprova a ricaricare la sessione", code: 400});
+        if(error) return res.status(400).json({msg:"Dati Errati, Riprova a ricaricare la sessione", code: 400});
         return res.status(200).json({msg: "Aggiunto Con Successo!!", code: 200});
     })
 }
@@ -113,7 +113,7 @@ function Add_Movies(req, res) {
         if (info_query.length !== 0) return res.status(302).json({msg: "L'immagine è già dentro", code: 302});
         database_use.query(insert_query, [title, director, genre, release_year, abstract, image], (error, result) =>{
             const error_search = error;
-            if(error_search !== 1048) return res.status(400).json({msg: "Dati Errati, Riprova a ricaricare la sessione", code: 400,});
+            if(error_search) return res.status(400).json({msg: "Dati Errati, Riprova a ricaricare la sessione", code: 400,});
             res.status(200).json({msg: "Record Aggiunto con sucesso!!", code: 200});
         })
     })
