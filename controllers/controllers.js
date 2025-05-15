@@ -77,9 +77,10 @@ function Reviews_id(req, res) {
     const id = String(req.params.id);
     const query = "SELECT tb1.*, ROUND((SELECT AVG(tb2.vote) FROM reviews AS tb2 WHERE tb2.movie_id = tb1.movie_id)) AS average_rating FROM reviews AS tb1 WHERE tb1.movie_id = ?";
     database_use.query(query, [id], (error, result) =>{
+        if (isNaN(id)) return res.status(400).json({msg:"il parametro deve essere un numero!!", code: 400}); 
         if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500}); 
         if (result.length === 0) {
-           return res.status(404).json({result, code: 404});
+           return res.status(200).json({result, code: 404});
         }
         return res.status(200).json({result, code: 200});
     })
@@ -94,7 +95,8 @@ function Add_Reviews(req, res) {
     
     const query = `INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)`;
     database_use.query(query, [id_movie, name_user, rate_vote, description_rate], (error, result) =>{
-        if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
+        console.log(error);
+        if(error.errno !== 1054) return res.status(400).json({msg:"Dati Errati, Riprova a ricaricare la sessione", code: 400});
         return res.status(200).json({msg: "Aggiunto Con Successo!!", code: 200});
     })
 }
@@ -103,18 +105,17 @@ function Add_Reviews(req, res) {
 function Add_Movies(req, res) {
     const { title, director, genre, release_year, abstract, image } = req.body;
     const search_query =  `SELECT * FROM movies WHERE image = ?`;
-    database_use.query(search_query, [image], (error, result) =>{
-      if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
-
-      if (result.length > 0) {
-         return res.status(302).json({msg: "L'immagine è già dentro", code: 302});
-      }
-
-      const insert_query = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)";
-      database_use.query(insert_query, [title, director, genre, release_year, abstract, image], (error, result) =>{
-      if(error) return res.status(500).json({msg:"Errore del Server, Riprova a ricaricare la sessione", code: 500});
-      return res.status(200).json({msg: "Record Aggiunto con sucesso!!", code: 200});
-    })
+    const insert_query = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)";
+    database_use.query(search_query, [image], (error, resultQuery) =>{
+      if(error) return res.status(400).json({msg:"Dati non Soddisfa, Riprova a ricaricare la sessione", code: 500});
+        const info_query = resultQuery;
+        // console.log(info_query);
+        if (info_query.length !== 0) return res.status(302).json({msg: "L'immagine è già dentro", code: 302});
+        database_use.query(insert_query, [title, director, genre, release_year, abstract, image], (error, result) =>{
+            const error_search = error;
+            if(error_search !== 1048) return res.status(400).json({msg: "Dati Errati, Riprova a ricaricare la sessione", code: 400,});
+            res.status(200).json({msg: "Record Aggiunto con sucesso!!", code: 200});
+        })
     })
 }
 
